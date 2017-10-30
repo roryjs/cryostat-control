@@ -35,9 +35,9 @@ def get_args():
     parser.add_argument('-w', '--wait', type=int, required=True, default=300, help='Wait time between readings.')
     parser.add_argument('-t', '--temp', type=int, required=True, default=77, help='Init temp')
 
-    parser.add_argument('-Z', '--tstep', type=int, required=False, default=5, help='Temp step')
-    parser.add_argument('-X', '--vstep', type=float, required=False, default=0.01, help='Voltage step')
-    parser.add_argument('-C', '--cstep', type=float, required=False, default=0.01, help='Current step')
+    parser.add_argument('-z', '--tstep', type=int, required=False, default=5, help='Temp step')
+    parser.add_argument('-x', '--vstep', type=float, required=False, default=0.01, help='Voltage step')
+    parser.add_argument('-c', '--cstep', type=float, required=False, default=0.01, help='Current step')
 
     return parser.parse_args()
 
@@ -194,8 +194,6 @@ if __name__ == "__main__":
     Vdmm.write(":SENS:FUNC 'VOLT:DC'")  # configure to dc voltage
     Idmm = K2000(26, 0)  # GPIB adaptor gpib0, device address 26
     Idmm.write(":SENS:FUNC 'CURR:DC'")  # configure to dc current
-
-    set_psu()
 
     wait_to_cool(args.temp)
 
