@@ -26,9 +26,9 @@ PSU._Ilimit = 3
 def get_args():
     parser = argparse.ArgumentParser(description='Do some measurements.')
     parser.add_argument('-n', '--npts', type=int, required=True, default=10, help='')
-    parser.add_argument('-s', '--savename', type=str, required=True, default='output.txt', help='')
-    parser.add_argument('-v', '--voltage', type=float, required=True, default='0.5', help='')
-    parser.add_argument('-i', '--current', type=float, required=True, default='0.01', help='')
+    parser.add_argument('-s', '--savename', type=str, required=False, default='output.txt', help='')
+    parser.add_argument('-v', '--voltage', type=float, required=False, default='0.5', help='')
+    parser.add_argument('-i', '--current', type=float, required=False, default='0.01', help='')
 
     parser.add_argument('-y', '--type', type=str, required=True, default='temperature', help='')
 
@@ -36,8 +36,8 @@ def get_args():
     parser.add_argument('-t', '--temp', type=int, required=True, default=77, help='Init temp')
 
     parser.add_argument('-Z', '--tstep', type=int, required=False, default=5, help='Temp step')
-    parser.add_argument('-X', '--vstep', type=float, required=True, default=0.01, help='Voltage step')
-    parser.add_argument('-C', '--cstep', type=float, required=True, default=0.01, help='Current step')
+    parser.add_argument('-X', '--vstep', type=float, required=False, default=0.01, help='Voltage step')
+    parser.add_argument('-C', '--cstep', type=float, required=False, default=0.01, help='Current step')
 
     return parser.parse_args()
 
