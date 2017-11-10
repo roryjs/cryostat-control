@@ -53,9 +53,10 @@ def wait_to_cool(temp):
     while t.temp[0] - 1 > reading[0]:
         sleep(10)
 
-    print('Waiting 15 mins... started at {}'.format(str(datetime.now())))
+    waittime = 10
+    print('Waiting {} mins... started at {}'.format(waittime, str(datetime.now())))
     
-    sleep(5 * 60)
+    sleep(waittime * 60)
 
 
 def set_temp(temp):
@@ -191,9 +192,9 @@ if __name__ == "__main__":
 
     # National Instruments GPIB-USB-HS GPIB interface
     Vdmm = K2000(16, 0)  # GPIB adaptor gpib0, device address 16
-    Vdmm.write(":SENS:FUNC 'VOLT:DC'")  # configure to dc voltage
+    #Vdmm.write(":SENS:FUNC 'VOLT:DC'")  # configure to dc voltage
     Idmm = K2000(26, 0)  # GPIB adaptor gpib0, device address 26
-    Idmm.write(":SENS:FUNC 'CURR:DC'")  # configure to dc current
+    #Idmm.write(":SENS:FUNC 'CURR:DC'")  # configure to dc current
 
     wait_to_cool(args.temp)
 
