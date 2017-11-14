@@ -29,6 +29,8 @@ ITC.close()
 Rdmm = K2000(16, 0)  # GPIB adaptor gpib0, device address 16
 print(Rdmm.reading)
 
+Idmm = K2000(26, 0)
+print(Idmm.reading)
 
 PSU = TenmaPSU('COM8') # USK-K-R-COM USB-to-serial connection COM4, must be connected via USB hub
 
