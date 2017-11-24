@@ -32,8 +32,8 @@ def get_args():
 
     parser.add_argument('-y', '--type', type=str, required=True, default='temperature', help='')
 
-    parser.add_argument('-w', '--wait', type=int, required=True, default=300, help='Wait time between readings.')
-    parser.add_argument('-t', '--temp', type=int, required=True, default=77, help='Init temp')
+    parser.add_argument('-w', '--wait', type=int, required=False, default=300, help='Wait time between readings.')
+    parser.add_argument('-t', '--temp', type=int, required=False, default=77, help='Init temp')
 
     parser.add_argument('-z', '--tstep', type=int, required=False, default=5, help='Temp step')
     parser.add_argument('-x', '--vstep', type=float, required=False, default=0.01, help='Voltage step')
@@ -53,7 +53,7 @@ def wait_to_cool(temp):
     while t.temp[0] - 1 > reading[0]:
         sleep(10)
 
-    waittime = 0
+    waittime = 5
     print('Waiting {} mins... started at {}'.format(waittime, str(datetime.now())))
     
     sleep(waittime * 60)
@@ -113,6 +113,33 @@ def iterate_temp(npts, temp, tstep, savename, wait):
 
     if not (savename == None):
         numpy.savetxt(savename, (T, V, I, ti, ti_temp, temps))  # save data to file
+
+def residual_temp(npts, savename):
+    # initialise data arrays
+    T = numpy.zeros(npts)
+    V = numpy.zeros(npts)
+    I = numpy.zeros(npts)
+    ti = numpy.zeros(npts)
+    ti_temp = numpy.zeros(npts)
+    temps = numpy.zeros(npts)
+
+    init_time = time()
+
+    # loop to take repeated readings
+    for p in range(npts):
+        ti_temp[p] = time() - init_time
+
+        T[p] = t.temp[0]
+        # t.temp returns a tuple containing the latest temperature reading (float)
+        # as element 0 and unit(string) as element 1
+        V[p] = Vdmm.reading  # *dmm.reading returns latest reading from *dmm (float, in Volt or Ampere units)
+        I[p] = Idmm.reading
+        ti[p] = time() - init_time
+
+        sleep(9.439)
+
+    if not (savename == None):
+        numpy.savetxt(savename, (T, V, I, ti, ti_temp))  # save data to file
 
 
 def iterate_voltage(npts, voltage, V_step, savename, wait):
@@ -196,7 +223,8 @@ if __name__ == "__main__":
     Idmm = K2000(26, 0)  # GPIB adaptor gpib0, device address 26
     #Idmm.write(":SENS:FUNC 'CURR:DC'")  # configure to dc current
 
-    wait_to_cool(args.temp)
+    if args.type != 'residual':
+        wait_to_cool(args.temp)
 
     if args.type == 'temperature':
         iterate_temp(args.npts, args.temp, args.tstep, args.savename, args.wait)
@@ -204,6 +232,8 @@ if __name__ == "__main__":
         iterate_current(args.npts, args.current, args.cstep, args.savename, args.wait)
     elif args.type == 'voltage':
         iterate_voltage(args.npts, args.voltage, args.vstep, args.savename, args.wait)
+    elif args.type == 'residual':
+        residual_temp(args.npts, args.savename)
 
     PSU.OutputOff  # Turn off PSU output
 
