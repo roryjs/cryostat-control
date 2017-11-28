@@ -20,19 +20,22 @@ print('hello')
 # Connect to devices
 ITC = MercuryITC('COM6')  # PI USB-to-serial connection COM3
 
-t = ITC.modules[0]  # module 0 is temperature board
+#t = ITC.modules[0]  # module 0 is temperature board
 # h = ITC.modules[1] # module 1 is heater power board
-print(t.tset)
-t.tset = 20
+#print(t.tset)
+#t.tset = 20
 ITC.close()
 
-Rdmm = K2000(16, 0)  # GPIB adaptor gpib0, device address 16
-print(Rdmm.reading)
-
-Idmm = K2000(26, 0)
+Idmm = K2000(6, 0)  # GPIB adaptor gpib0, device address 16
 print(Idmm.reading)
 
-PSU = TenmaPSU('COM8') # USK-K-R-COM USB-to-serial connection COM4, must be connected via USB hub
+Vdmm = K2000(16, 0)  # GPIB adaptor gpib0, device address 16
+print(Vdmm.reading)
 
-print(PSU.GetIdentity())
-PSU.SetVoltage = 12
+Rdmm = K2000(26, 0)
+print(Rdmm.reading)
+
+#PSU = TenmaPSU('COM8') # USK-K-R-COM USB-to-serial connection COM4, must be connected via USB hub
+
+#print(PSU.GetIdentity())
+#PSU.SetVoltage = 12

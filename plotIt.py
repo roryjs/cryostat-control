@@ -37,7 +37,7 @@ for i in ramp_index2:
     av_voltages2.append(numpy.abs(numpy.average(V2[i-10:i])))
     av_currents2.append(numpy.average(I2[i-10:i]))
 print av_voltages2'''
-(T, V, I, ti, ti_I) = numpy.loadtxt('trampresidual.txt')
+(T, V, I, ti, ti_I) = numpy.loadtxt('trampresidual2-dud-0.2.txt')
 ti_I = numpy.trim_zeros(ti_I, 'b')
 
 ramp_index = []
@@ -53,7 +53,7 @@ av_currents = []
 for i in ramp_index:
     av_voltages.append(numpy.abs(numpy.average(V[i-10:i])))
     av_currents.append(numpy.average(I[i-10:i]))
-print av_voltages
+#print av_voltages
 #print temps
 #print ti_temp
 
@@ -65,7 +65,7 @@ pyplot.figure()
 pyplot.figure(1)
 pyplot.plot(ti, T)
 pyplot.figure(2)
-pyplot.plot(T, V)
+pyplot.plot(T, V, marker='x')
 #pyplot.plot(av_voltages2, av_currents2)
 #pyplot.plot(I, V)
 #pyplot.plot(ti, V/I)

@@ -119,6 +119,7 @@ def residual_temp(npts, savename):
     T = numpy.zeros(npts)
     V = numpy.zeros(npts)
     I = numpy.zeros(npts)
+    R = numpy.zeros(npts)
     ti = numpy.zeros(npts)
     ti_temp = numpy.zeros(npts)
     temps = numpy.zeros(npts)
@@ -134,12 +135,13 @@ def residual_temp(npts, savename):
         # as element 0 and unit(string) as element 1
         V[p] = Vdmm.reading  # *dmm.reading returns latest reading from *dmm (float, in Volt or Ampere units)
         I[p] = Idmm.reading
+        R[p] = Rdmm.reading
         ti[p] = time() - init_time
 
-        sleep(9.439)
+        sleep(4.561)
 
     if not (savename == None):
-        numpy.savetxt(savename, (T, V, I, ti, ti_temp))  # save data to file
+        numpy.savetxt(savename, (T, V, I, R, ti, ti_temp))  # save data to file
 
 
 def iterate_voltage(npts, voltage, V_step, savename, wait):
@@ -217,10 +219,11 @@ def iterate_current(npts, current, I_step, savename, wait):
 if __name__ == "__main__":
     args = get_args()
 
+    Idmm = K2000(6, 0)  # GPIB adaptor gpib0, device address 16
     # National Instruments GPIB-USB-HS GPIB interface
     Vdmm = K2000(16, 0)  # GPIB adaptor gpib0, device address 16
     #Vdmm.write(":SENS:FUNC 'VOLT:DC'")  # configure to dc voltage
-    Idmm = K2000(26, 0)  # GPIB adaptor gpib0, device address 26
+    Rdmm = K2000(26, 0)  # GPIB adaptor gpib0, device address 26
     #Idmm.write(":SENS:FUNC 'CURR:DC'")  # configure to dc current
 
     if args.type != 'residual':
