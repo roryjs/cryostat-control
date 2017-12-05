@@ -13,8 +13,8 @@ from email.mime.text import MIMEText
 
 
 # Connect to devices
-ITC = MercuryITC('COM6')  # PI USB-to-serial connection COM3
-t = ITC.modules[0]  # module 0 is temperature board
+#ITC = MercuryITC('COM6')  # PI USB-to-serial connection COM3
+#t = ITC.modules[0]  # module 0 is temperature board
 # h = ITC.modules[1] # module 1 is heater power board
 
 PSU = TenmaPSU('COM8')  # USK-K-R-COM USB-to-serial connection COM4, must be connected via USB hub
@@ -115,33 +115,37 @@ def iterate_temp(npts, temp, tstep, savename, wait):
         numpy.savetxt(savename, (T, V, I, ti, ti_temp, temps))  # save data to file
 
 def residual_temp(npts, savename):
-    # initialise data arrays
-    T = numpy.zeros(npts)
-    V = numpy.zeros(npts)
-    I = numpy.zeros(npts)
-    R = numpy.zeros(npts)
-    ti = numpy.zeros(npts)
-    ti_temp = numpy.zeros(npts)
-    temps = numpy.zeros(npts)
+    try:
+        # initialise data arrays
+        T = numpy.zeros(npts)
+        V = numpy.zeros(npts)
+        I = numpy.zeros(npts)
+        R = numpy.zeros(npts)
+        ti = numpy.zeros(npts)
+        ti_temp = numpy.zeros(npts)
+        temps = numpy.zeros(npts)
 
-    init_time = time()
+        init_time = time()
 
-    # loop to take repeated readings
-    for p in range(npts):
-        ti_temp[p] = time() - init_time
+        # loop to take repeated readings
+        for p in range(npts):
+            ti_temp[p] = time() - init_time
 
-        T[p] = t.temp[0]
-        # t.temp returns a tuple containing the latest temperature reading (float)
-        # as element 0 and unit(string) as element 1
-        V[p] = Vdmm.reading  # *dmm.reading returns latest reading from *dmm (float, in Volt or Ampere units)
-        I[p] = Idmm.reading
-        R[p] = Rdmm.reading
-        ti[p] = time() - init_time
+            #T[p] = t.temp[0]
+            # t.temp returns a tuple containing the latest temperature reading (float)
+            # as element 0 and unit(string) as element 1
+            V[p] = Vdmm.reading  # *dmm.reading returns latest reading from *dmm (float, in Volt or Ampere units)
+            I[p] = Idmm.reading
+            R[p] = Rdmm.reading
+            ti[p] = time() - init_time
 
-        sleep(4.561)
+            sleep(0.1)
 
-    if not (savename == None):
-        numpy.savetxt(savename, (T, V, I, R, ti, ti_temp))  # save data to file
+        if not (savename == None):
+            numpy.savetxt(savename, (T, V, I, R, ti, ti_temp))  # save data to file
+    except KeyboardInterrupt:
+        numpy.savetxt(savename, (T, V, I, R, ti, ti_temp))
+        sys.exit()
 
 
 def iterate_voltage(npts, voltage, V_step, savename, wait):
@@ -242,4 +246,4 @@ if __name__ == "__main__":
 
     # Disconnect from instruments
     PSU.close()
-    ITC.close()
+    #ITC.close()
