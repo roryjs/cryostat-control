@@ -37,7 +37,7 @@ for i in ramp_index2:
     av_voltages2.append(numpy.abs(numpy.average(V2[i-10:i])))
     av_currents2.append(numpy.average(I2[i-10:i]))
 print av_voltages2'''
-(T, V, I, R, ti, ti_temp) = numpy.loadtxt('trampresidual10-comm-0.3.txt')
+(T, V, I, R, ti, ti_temp) = numpy.loadtxt('trampresidual15-dud2-0.5-decrease.txt')
 #T = numpy.trim_zeros(T, 'b')
 #V = numpy.trim_zeros(V, 'b')
 #I = numpy.trim_zeros(I, 'b')
@@ -69,11 +69,36 @@ pyplot.figure()
 pyplot.figure(1)
 pyplot.plot(ti, R)
 pyplot.figure(2)
-pyplot.plot(ti, V, marker='x')
+pyplot.plot(R, V, marker='x')
 
 pyplot.figure(3)
-pyplot.plot(ti, numpy.gradient(V))
+pyplot.plot(R, numpy.gradient(V))
 
+def moving_average(a, n=5) :
+    ret = numpy.cumsum(a, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+
+
+av_r = moving_average(R)
+av_v = moving_average(V)
+
+pyplot.figure(4)
+pyplot.plot(av_r, av_v, marker='x')
+pyplot.figure(5)
+pyplot.plot(av_r, numpy.gradient(av_v))
+
+pyplot.figure(6)
+pyplot.plot(R, numpy.gradient(V/I))
+
+pyplot.figure(7)
+
+def res_to_t(R):
+    R0 = 100
+    return (-R0 * 3.9083E-3 + (R0 * R0 * + 3.9083E-3 * 3.9083E-3 - 4 * R0 * -5.775E-7 * (R0 - R)))**0.5 /(2 * R0 * -5.775E-7)
+rs = res_to_t(R)
+print(rs)
+pyplot.plot(rs, V/I)
 
 #pyplot.plot(av_voltages2, av_currents2)
 #pyplot.plot(I, V)
