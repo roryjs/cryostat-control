@@ -37,7 +37,7 @@ for i in ramp_index2:
     av_voltages2.append(numpy.abs(numpy.average(V2[i-10:i])))
     av_currents2.append(numpy.average(I2[i-10:i]))
 print av_voltages2'''
-(T, V, I, R, ti, ti_temp) = numpy.loadtxt('trampresidual15-dud2-0.5-decrease.txt')
+(T, V, I, R, ti, ti_temp) = numpy.loadtxt('trampresidual22-ceri-0.5.txt')
 #T = numpy.trim_zeros(T, 'b')
 #V = numpy.trim_zeros(V, 'b')
 #I = numpy.trim_zeros(I, 'b')
